@@ -1,6 +1,7 @@
 #MALDI Parser Advanced
 
 ## Import Modules
+
 import xlrd
 import pandas as pd
 import numpy as np
@@ -110,10 +111,20 @@ def process():
         indicator_process = 0
 
         #Default Peaks
+        
         peak01 = int(text_peak01.get('1.0', tk.END))
         peak02 = int(text_peak02.get('1.0', tk.END))
+        peak03 = int(text_peak03.get('1.0', tk.END))
+        peak04 = int(text_peak04.get('1.0', tk.END))
         
-        normal_mzs=[peak01, peak02]
+        peaks = [peak01, peak02, peak03, peak04]
+        
+        normal_mzs = []
+        
+        for peak in peaks:
+            if peak != 0:
+                normal_mzs.append(peak)
+                
         normal_rows=len(normal_mzs)
 
         #Import File
@@ -274,11 +285,14 @@ root = tk.Tk()
 
 peak01 = 2791
 peak02 = 2819
+peak03 = 2836
+peak04 = 0
+
 indicator_process = 0
 
 filename = ''
 
-w = 700 # width for the Tk root
+w = 900 # width for the Tk root
 h = 500 # height for the Tk root
 
 # get screen width and height
@@ -296,7 +310,7 @@ root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 root.title('MALDI Parser')
 
 # Progress Bar
-progressbar = ttk.Progressbar(root, length=500, maximum=1000, mode='determinate')
+progressbar = ttk.Progressbar(root, length=750, maximum=1000, mode='determinate')
 progressbar.place(x=60,y=250)
 
 # Text
@@ -319,6 +333,21 @@ label_peak02.place(x=260,y=190)
 text_peak02.delete('1.0', tk.END)
 text_peak02.insert('1.0', str(peak02))
 
+text_peak03=tk.Text(root, width=8,height=1, font=('tahoma', 9), bd=2)
+text_peak03.place(x=530, y=190)
+label_peak03=tk.Label(root, text='Peak 03:', font=('tahoma', 9))
+label_peak03.place(x=460,y=190)
+text_peak03.delete('1.0', tk.END)
+text_peak03.insert('1.0', str(peak03))
+
+text_peak04=tk.Text(root, width=8,height=1, font=('tahoma', 9), bd=2)
+text_peak04.place(x=730, y=190)
+label_peak04=tk.Label(root, text='Peak 04:', font=('tahoma', 9))
+label_peak04.place(x=660,y=190)
+text_peak04.delete('1.0', tk.END)
+text_peak04.insert('1.0', str(peak04))
+
+
 
 # Buttons
 button_browse=ttk.Button(root, text='Browse...', width=20, command=browseFileButton)
@@ -331,6 +360,6 @@ button_browse=ttk.Button(root, text='Export', width=20, command=exportFileButton
 button_browse.place(x=60, y=410)
 
 button_close=ttk.Button(root, width=20, text='Exit', command=root.destroy)
-button_close.place(x=450, y=410)
+button_close.place(x=650, y=410)
 
 root.mainloop()
