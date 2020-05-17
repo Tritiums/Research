@@ -1,0 +1,41 @@
+# 1. We should install the pyaudio module:
+$ sudo apt install python3-pyaudio
+
+# 2. Check the hardware of record and play configuration:
+$ arecord -l
+
+$ aplay -l
+
+find the card # and device #
+
+For instance, the record is card 1 and device 0, and play is card 0 and device 0:
+
+You also can use
+$ lsusb
+to display the USB port.
+
+Make a system file name ".asoundrc":
+
+pcm.!default {
+  type asym
+  capture.pcm "mic"
+  playback.pcm "speaker"
+}
+pcm.mic {
+  type plug
+  slave {
+    pcm "hw:1,0"
+  }
+}
+pcm.speaker {
+  type plug
+  slave {
+    pcm "hw:0,0"
+  }
+}
+
+# 3. Setup several settings:
+$ sudo apt-get install libportaudio0 libportaudio2 libportaudiocpp0 portaudio19-dev
+
+# 4. Adjust the volume:
+$ alsamixer
