@@ -4,6 +4,7 @@ import wave
 import os
 import datetime
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
+import matplotlib.pyplot as plt
 
 GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
@@ -20,12 +21,16 @@ record_secs = 30     #record time
 dev_index = 2
 
 def button_callback(channel):
+    global frames, frames_numpy
     
     print("Button was pushed!")
 
     now = datetime.datetime.now()
-    filename = 'Wave_File_' + str(now)[:10] + now.strftime("_%H_%M_%S.wav")
-    wav_output_filename = filename
+    filename_wav = 'Wave_File_' + str(now)[:10] + now.strftime("_%H_%M_%S.wav")
+    filename_png = 'Chart_File_' + str(now)[:10] + now.strftime("_%H_%M_%S.png")
+    wav_output_filename = filename_wav
+    png_output_filename = filename_png
+    
 
     p = pyaudio.PyAudio()
 
@@ -47,6 +52,7 @@ def button_callback(channel):
 
     print("Broadcasting & Recording")
     frames = []
+    frames_numpy = []
 
     for ii in range(0,int((samp_rate/chunk)*record_secs)):
         data = stream.read(chunk,exception_on_overflow = False)
@@ -54,6 +60,7 @@ def button_callback(channel):
     
         data_numpy = np.fromstring(data, dtype=np.int16)
         player.write(data_numpy, chunk)
+        frames_numpy.append(data_numpy)
 
     print("Finished recording")
 
@@ -71,9 +78,16 @@ def button_callback(channel):
     wavefile.close()
 
     #plays the audio file
-    os.system("aplay " + filename)
+    os.system("aplay " + filename_wav)    
+    
+    # Export the plot:
+    fig = plt.figure()
+    s = fig.add_subplot(111)
+    s.plot(frames_numpy)
+    fig.savefig(png_output_filename, dpi=200)
     
 GPIO.add_event_detect(10,GPIO.RISING,callback=button_callback) # Setup event on pin 10 rising edge
+
 
 message = input("Press enter to quit\n\n") # Run until someone presses enter
 GPIO.cleanup() # Clean up
