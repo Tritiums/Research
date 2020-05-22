@@ -39,3 +39,16 @@ $ sudo apt-get install libportaudio0 libportaudio2 libportaudiocpp0 portaudio19-
 
 # 4. Adjust the volume:
 $ alsamixer
+
+# 5. Configure the Raspberry Pi system:
+$ sudo raspi-config
+
+Select "Advanced Options", then select "Audio", press Enter. After that select "Finish".
+
+#. Test the audio:
+Speaker:
+$ speaker-test –t wav
+
+Microphone:
+$ arecord --format=S16_LE --duration=5 --rate=16000 --file-type=raw sample.wav
+aplay --format=S16_LE --rate=16000 sample.wav
