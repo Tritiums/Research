@@ -76,3 +76,6 @@ top
 to find the PID no, then type:
 
 kill #PID NO
+
+# Install GPIO Tactile Button Programme
+$ sudo apt-get install python3-rpi.gpio
