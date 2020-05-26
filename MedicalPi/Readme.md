@@ -1,4 +1,4 @@
-# 1. We should install the pyaudio module:
+# 1. We should install the pyaudio module:  # ***** Essential *****!
 $ sudo apt install python3-pyaudio
 
 # 2. Check the hardware of record and play configuration:
@@ -40,7 +40,7 @@ $ sudo apt-get install libportaudio0 libportaudio2 libportaudiocpp0 portaudio19-
 # 4. Adjust the volume:
 $ alsamixer
 
-# 5. Configure the Raspberry Pi system:
+# 5. Configure the Raspberry Pi system:  # ********** Essential !!!!! ***************
 $ sudo raspi-config
 
 Select "Advanced Options", then select "Audio", press Enter. After that select "Finish".
